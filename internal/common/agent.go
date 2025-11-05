@@ -11,13 +11,13 @@ import (
 	"strconv"
 
 	"github.com/nats-io/nats.go"
-	"github.com/open-uem/ent"
-	"github.com/open-uem/ent/agent"
-	"github.com/open-uem/ent/task"
-	openuem_nats "github.com/open-uem/nats"
-	"github.com/open-uem/wingetcfg/wingetcfg"
+	"github.com/scncore/ent"
+	"github.com/scncore/ent/agent"
+	"github.com/scncore/ent/task"
+	scnorion_nats "github.com/scncore/nats"
+	"github.com/scncore/wingetcfg/wingetcfg"
 
-	ansiblecfg "github.com/open-uem/openuem-ansible-config/ansible"
+	ansiblecfg "github.com/scncore/scnorion-ansible-config/ansible"
 	"gopkg.in/yaml.v3"
 )
 
@@ -30,63 +30,63 @@ type ProfileConfig struct {
 }
 
 func (w *Worker) SubscribeToAgentWorkerQueues() error {
-	_, err := w.NATSConnection.QueueSubscribe("report", "openuem-agents", w.ReportReceivedHandler)
+	_, err := w.NATSConnection.QueueSubscribe("report", "scnorion-agents", w.ReportReceivedHandler)
 	if err != nil {
 		log.Printf("[ERROR]: could not subscribe to report NATS message, reason: %v", err)
 		return err
 	}
 	log.Printf("[INFO]: subscribed to message report")
 
-	_, err = w.NATSConnection.QueueSubscribe("deployresult", "openuem-agents", w.DeployResultReceivedHandler)
+	_, err = w.NATSConnection.QueueSubscribe("deployresult", "scnorion-agents", w.DeployResultReceivedHandler)
 	if err != nil {
 		log.Printf("[ERROR]: could not subscribe to deployresult NATS message, reason: %v", err)
 		return err
 	}
 	log.Printf("[INFO]: subscribed to message deployresult")
 
-	_, err = w.NATSConnection.QueueSubscribe("ping.agentworker", "openuem-agents", w.PingHandler)
+	_, err = w.NATSConnection.QueueSubscribe("ping.agentworker", "scnorion-agents", w.PingHandler)
 	if err != nil {
 		log.Printf("[ERROR]: could not subscribe to ping.agentworker NATS message, reason: %v", err)
 		return err
 	}
 	log.Printf("[INFO]: subscribed to message ping.agentworker")
 
-	_, err = w.NATSConnection.QueueSubscribe("agentconfig", "openuem-agents", w.AgentConfigHandler)
+	_, err = w.NATSConnection.QueueSubscribe("agentconfig", "scnorion-agents", w.AgentConfigHandler)
 	if err != nil {
 		log.Printf("[ERROR]: could not subscribe to agentconfig NATS message, reason: %v", err)
 		return err
 	}
 	log.Printf("[INFO]: subscribed to message agentconfig")
 
-	_, err = w.NATSConnection.QueueSubscribe("wingetcfg.profiles", "openuem-agents", w.ApplyWindowsEndpointProfiles)
+	_, err = w.NATSConnection.QueueSubscribe("wingetcfg.profiles", "scnorion-agents", w.ApplyWindowsEndpointProfiles)
 	if err != nil {
 		log.Printf("[ERROR]: could not subscribe to wingetcfg.profiles NATS message, reason: %v", err)
 		return err
 	}
 	log.Printf("[INFO]: subscribed to message wingetcfg.profiles")
 
-	_, err = w.NATSConnection.QueueSubscribe("ansiblecfg.profiles", "openuem-agents", w.ApplyUnixEndpointProfiles)
+	_, err = w.NATSConnection.QueueSubscribe("ansiblecfg.profiles", "scnorion-agents", w.ApplyUnixEndpointProfiles)
 	if err != nil {
 		log.Printf("[ERROR]: could not subscribe to ansiblecfg.profiles NATS message, reason: %v", err)
 		return err
 	}
 	log.Printf("[INFO]: subscribed to message ansiblecfg.profiles")
 
-	_, err = w.NATSConnection.QueueSubscribe("wingetcfg.deploy", "openuem-agents", w.WinGetCfgDeploymentReport)
+	_, err = w.NATSConnection.QueueSubscribe("wingetcfg.deploy", "scnorion-agents", w.WinGetCfgDeploymentReport)
 	if err != nil {
 		log.Printf("[ERROR]: could not subscribe to wingetcfg.deploy NATS message, reason: %v", err)
 		return err
 	}
 	log.Printf("[INFO]: subscribed to message wingetcfg.deploy")
 
-	_, err = w.NATSConnection.QueueSubscribe("wingetcfg.exclude", "openuem-agents", w.WinGetCfgMarkPackageAsExcluded)
+	_, err = w.NATSConnection.QueueSubscribe("wingetcfg.exclude", "scnorion-agents", w.WinGetCfgMarkPackageAsExcluded)
 	if err != nil {
 		log.Printf("[ERROR]: could not subscribe to wingetcfg.exclude NATS message, reason: %v", err)
 		return err
 	}
 	log.Printf("[INFO]: subscribed to message wingetcfg.exclude")
 
-	_, err = w.NATSConnection.QueueSubscribe("wingetcfg.report", "openuem-agents", w.WinGetCfgApplicationReport)
+	_, err = w.NATSConnection.QueueSubscribe("wingetcfg.report", "scnorion-agents", w.WinGetCfgApplicationReport)
 	if err != nil {
 		log.Printf("[ERROR]: could not subscribe to wingetcfg.report NATS message, reason: %v", err)
 		return err
@@ -96,14 +96,14 @@ func (w *Worker) SubscribeToAgentWorkerQueues() error {
 }
 
 func (w *Worker) ReportReceivedHandler(msg *nats.Msg) {
-	data := openuem_nats.AgentReport{}
+	data := scnorion_nats.AgentReport{}
 	tenantID := ""
 
 	if err := json.Unmarshal(msg.Data, &data); err != nil {
 		log.Printf("[ERROR]: could not unmarshal agent report, reason: %v\n", err)
 	}
 
-	requestConfig := openuem_nats.RemoteConfigRequest{
+	requestConfig := scnorion_nats.RemoteConfigRequest{
 		AgentID:  data.AgentID,
 		TenantID: data.Tenant,
 		SiteID:   data.Site,
@@ -129,7 +129,7 @@ func (w *Worker) ReportReceivedHandler(msg *nats.Msg) {
 
 		settings, err := w.Model.GetSettings(tenantID)
 		if err != nil {
-			log.Printf("[ERROR]: could not get OpenUEM general settings, reason: %v\n", err)
+			log.Printf("[ERROR]: could not get scnorion general settings, reason: %v\n", err)
 		} else {
 			autoAdmitAgents = settings.AutoAdmitAgents
 		}
@@ -201,7 +201,7 @@ func (w *Worker) ReportReceivedHandler(msg *nats.Msg) {
 }
 
 func (w *Worker) DeployResultReceivedHandler(msg *nats.Msg) {
-	data := openuem_nats.DeployAction{}
+	data := scnorion_nats.DeployAction{}
 
 	if err := json.Unmarshal(msg.Data, &data); err != nil {
 		log.Printf("[ERROR]: could not unmarshal deploy message, reason: %v\n", err)
@@ -223,7 +223,7 @@ func (w *Worker) DeployResultReceivedHandler(msg *nats.Msg) {
 
 func (w *Worker) ApplyWindowsEndpointProfiles(msg *nats.Msg) {
 	configurations := []ProfileConfig{}
-	profileRequest := openuem_nats.CfgProfiles{}
+	profileRequest := scnorion_nats.CfgProfiles{}
 
 	// log.Println("[DEBUG]: received a wingetcfg.profiles message")
 
@@ -272,7 +272,7 @@ func (w *Worker) ApplyWindowsEndpointProfiles(msg *nats.Msg) {
 	// 	}
 	// 	if !installed {
 	// 		// We must remove it from our deployments and also add it to the exclusion list
-	// 		data := openuem_nats.DeployAction{}
+	// 		data := scnorion_nats.DeployAction{}
 	// 		data.AgentId = profileRequest.AgentID
 	// 		data.PackageId = d.PackageID
 	// 		if err := w.Model.MarkPackageAsExcluded(data); err != nil {
@@ -329,7 +329,7 @@ func (w *Worker) ApplyWindowsEndpointProfiles(msg *nats.Msg) {
 
 func (w *Worker) ApplyUnixEndpointProfiles(msg *nats.Msg) {
 	configurations := []ProfileConfig{}
-	profileRequest := openuem_nats.CfgProfiles{}
+	profileRequest := scnorion_nats.CfgProfiles{}
 
 	// Unmarshal data and get agentID
 	if err := json.Unmarshal(msg.Data, &profileRequest); err != nil {
@@ -719,7 +719,7 @@ func (w *Worker) GenerateAnsibleConfig(profile *ent.Profile) (*ansiblecfg.Ansibl
 }
 
 func (w *Worker) WinGetCfgDeploymentReport(msg *nats.Msg) {
-	deploy := openuem_nats.DeployAction{}
+	deploy := scnorion_nats.DeployAction{}
 
 	// log.Println("[DEBUG]: received a wingetcfg.deploy message")
 
@@ -742,7 +742,7 @@ func (w *Worker) WinGetCfgDeploymentReport(msg *nats.Msg) {
 }
 
 func (w *Worker) WinGetCfgMarkPackageAsExcluded(msg *nats.Msg) {
-	deploy := openuem_nats.DeployAction{}
+	deploy := scnorion_nats.DeployAction{}
 
 	// log.Println("[DEBUG]: received a wingetcfg.deploy message")
 
@@ -762,7 +762,7 @@ func (w *Worker) WinGetCfgMarkPackageAsExcluded(msg *nats.Msg) {
 }
 
 func (w *Worker) WinGetCfgApplicationReport(msg *nats.Msg) {
-	report := openuem_nats.WingetCfgReport{}
+	report := scnorion_nats.WingetCfgReport{}
 
 	// log.Println("[DEBUG]: received a wingetcfg.report message")
 

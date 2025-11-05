@@ -5,10 +5,10 @@ import (
 	"log"
 	"strings"
 
-	"github.com/open-uem/ent/agent"
-	"github.com/open-uem/ent/deployment"
-	"github.com/open-uem/ent/wingetconfigexclusion"
-	"github.com/open-uem/nats"
+	"github.com/scncore/ent/agent"
+	"github.com/scncore/ent/deployment"
+	"github.com/scncore/ent/wingetconfigexclusion"
+	"github.com/scncore/nats"
 )
 
 func (m *Model) SaveDeployInfo(data *nats.DeployAction) error {
@@ -80,7 +80,7 @@ func (m *Model) SaveDeployInfo(data *nats.DeployAction) error {
 					return err
 				}
 
-				// If package was installed due to a profile, add a new exclusion as we've removed it using OpenUEM Console
+				// If package was installed due to a profile, add a new exclusion as we've removed it using scnorion Console
 				if d.ByProfile {
 					return m.Client.WingetConfigExclusion.Create().SetPackageID(data.PackageId).SetOwnerID(data.AgentId).Exec(context.Background())
 				}

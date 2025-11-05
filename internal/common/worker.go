@@ -10,11 +10,11 @@ import (
 	"github.com/go-co-op/gocron/v2"
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/jetstream"
-	"github.com/open-uem/ent"
-	"github.com/open-uem/ent/server"
-	openuem_nats "github.com/open-uem/nats"
-	"github.com/open-uem/openuem-worker/internal/models"
-	"github.com/open-uem/utils"
+	"github.com/scncore/ent"
+	"github.com/scncore/ent/server"
+	scnorion_nats "github.com/scncore/nats"
+	"github.com/scncore/scnorion-worker/internal/models"
+	"github.com/scncore/utils"
 )
 
 type Worker struct {
@@ -36,9 +36,9 @@ type Worker struct {
 	Cert                   *x509.Certificate
 	CertBytes              []byte
 	PrivateKey             *rsa.PrivateKey
-	CertRequest            *openuem_nats.CertificateRequest
+	CertRequest            *scnorion_nats.CertificateRequest
 	Settings               *ent.Settings
-	Logger                 *utils.OpenUEMLogger
+	Logger                 *utils.scnorionLogger
 	ConsoleURL             string
 	OCSPResponders         []string
 	JetstreamContextCancel context.CancelFunc
@@ -99,9 +99,9 @@ func (w *Worker) PingHandler(msg *nats.Msg) {
 }
 
 func (w *Worker) AgentConfigHandler(msg *nats.Msg) {
-	config := openuem_nats.Config{}
+	config := scnorion_nats.Config{}
 
-	remoteConfigRequest := openuem_nats.RemoteConfigRequest{}
+	remoteConfigRequest := scnorion_nats.RemoteConfigRequest{}
 	err := json.Unmarshal(msg.Data, &remoteConfigRequest)
 	if err != nil {
 		remoteConfigRequest.AgentID = string(msg.Data)

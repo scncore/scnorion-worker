@@ -8,24 +8,24 @@ import (
 	"syscall"
 
 	"github.com/go-co-op/gocron/v2"
-	"github.com/open-uem/openuem-worker/internal/common"
+	"github.com/scncore/scnorion-worker/internal/common"
 	"github.com/urfave/cli/v2"
 )
 
 func NotificationsWorker() *cli.Command {
 	return &cli.Command{
 		Name:  "notifications",
-		Usage: "Manage OpenUEM's Notifications worker",
+		Usage: "Manage scnorion's Notifications worker",
 		Subcommands: []*cli.Command{
 			{
 				Name:   "start",
-				Usage:  "Start an OpenUEM's Notifications worker",
+				Usage:  "Start an scnorion's Notifications worker",
 				Action: startNotificationsWorker,
 				Flags:  CommonFlags(),
 			},
 			{
 				Name:   "stop",
-				Usage:  "Stop an OpenUEM's Notifications worker",
+				Usage:  "Stop an scnorion's Notifications worker",
 				Action: stopWorker,
 			},
 		},

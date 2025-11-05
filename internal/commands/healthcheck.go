@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/nats-io/nats.go"
-	"github.com/open-uem/openuem-worker/internal/common"
+	"github.com/scncore/scnorion-worker/internal/common"
 	"github.com/urfave/cli/v2"
 )
 

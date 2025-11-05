@@ -6,15 +6,15 @@ import (
 	"log"
 
 	"github.com/go-co-op/gocron/v2"
-	"github.com/open-uem/openuem-worker/internal/common"
-	"github.com/open-uem/utils"
+	"github.com/scncore/scnorion-worker/internal/common"
+	"github.com/scncore/utils"
 	"golang.org/x/sys/windows/svc"
 )
 
 func main() {
 	var err error
-	w := common.NewWorker("openuem-cert-manager-worker.txt")
-	s := utils.NewOpenUEMWindowsService()
+	w := common.NewWorker("scnorion-cert-manager-worker.txt")
+	s := utils.NewscnorionWindowsService()
 
 	// Start Task Scheduler
 	w.TaskScheduler, err = gocron.NewScheduler()
@@ -38,7 +38,7 @@ func main() {
 	s.ServiceStop = w.StopWorker
 
 	// Run service
-	if err := svc.Run("openuem-cert-manager-worker", s); err != nil {
+	if err := svc.Run("scnorion-cert-manager-worker", s); err != nil {
 		log.Printf("[ERROR]: could not run service: %v", err)
 	}
 }

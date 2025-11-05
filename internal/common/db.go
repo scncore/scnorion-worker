@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/go-co-op/gocron/v2"
-	"github.com/open-uem/openuem-worker/internal/models"
+	"github.com/scncore/scnorion-worker/internal/models"
 )
 
 func (w *Worker) StartDBConnectJob(subscription func() error) error {

@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/open-uem/ent"
-	"github.com/open-uem/nats"
+	"github.com/scncore/ent"
+	"github.com/scncore/nats"
 	"github.com/wneessen/go-mail"
 )
 

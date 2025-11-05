@@ -3,12 +3,12 @@ package models
 import (
 	"context"
 
-	"github.com/open-uem/ent"
-	"github.com/open-uem/ent/agent"
-	"github.com/open-uem/ent/profile"
-	"github.com/open-uem/ent/profileissue"
-	"github.com/open-uem/ent/site"
-	"github.com/open-uem/ent/tag"
+	"github.com/scncore/ent"
+	"github.com/scncore/ent/agent"
+	"github.com/scncore/ent/profile"
+	"github.com/scncore/ent/profileissue"
+	"github.com/scncore/ent/site"
+	"github.com/scncore/ent/tag"
 )
 
 func (m *Model) GetProfilesAppliedToAll(siteID int) ([]*ent.Profile, error) {

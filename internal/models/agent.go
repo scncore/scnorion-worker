@@ -12,27 +12,27 @@ import (
 	"strings"
 	"time"
 
-	"github.com/open-uem/ent"
-	"github.com/open-uem/ent/agent"
-	"github.com/open-uem/ent/antivirus"
-	"github.com/open-uem/ent/app"
-	"github.com/open-uem/ent/computer"
-	"github.com/open-uem/ent/logicaldisk"
-	"github.com/open-uem/ent/memoryslot"
-	"github.com/open-uem/ent/monitor"
-	"github.com/open-uem/ent/networkadapter"
-	"github.com/open-uem/ent/operatingsystem"
-	"github.com/open-uem/ent/physicaldisk"
-	"github.com/open-uem/ent/printer"
-	"github.com/open-uem/ent/release"
-	"github.com/open-uem/ent/settings"
-	"github.com/open-uem/ent/share"
-	"github.com/open-uem/ent/site"
-	"github.com/open-uem/ent/systemupdate"
-	"github.com/open-uem/ent/tenant"
-	"github.com/open-uem/ent/update"
-	"github.com/open-uem/nats"
-	"github.com/open-uem/utils"
+	"github.com/scncore/ent"
+	"github.com/scncore/ent/agent"
+	"github.com/scncore/ent/antivirus"
+	"github.com/scncore/ent/app"
+	"github.com/scncore/ent/computer"
+	"github.com/scncore/ent/logicaldisk"
+	"github.com/scncore/ent/memoryslot"
+	"github.com/scncore/ent/monitor"
+	"github.com/scncore/ent/networkadapter"
+	"github.com/scncore/ent/operatingsystem"
+	"github.com/scncore/ent/physicaldisk"
+	"github.com/scncore/ent/printer"
+	"github.com/scncore/ent/release"
+	"github.com/scncore/ent/settings"
+	"github.com/scncore/ent/share"
+	"github.com/scncore/ent/site"
+	"github.com/scncore/ent/systemupdate"
+	"github.com/scncore/ent/tenant"
+	"github.com/scncore/ent/update"
+	"github.com/scncore/nats"
+	"github.com/scncore/utils"
 )
 
 func (m *Model) SaveAgentInfo(data *nats.AgentReport, servers string, autoAdmitAgents bool) error {
@@ -669,14 +669,14 @@ func (m *Model) SaveReleaseInfo(data *nats.AgentReport) error {
 	// If not exists add it
 	if !releaseExists {
 		// Get release info from API
-		url := fmt.Sprintf("https://releases.openuem.eu/api?action=agentReleaseInfo&version=%s", data.Release.Version)
+		url := fmt.Sprintf("https://releases.scnorion.eu/api?action=agentReleaseInfo&version=%s", data.Release.Version)
 
 		body, err := utils.QueryReleasesEndpoint(url)
 		if err != nil {
 			return err
 		}
 
-		releaseFromApi := nats.OpenUEMRelease{}
+		releaseFromApi := nats.scnorionRelease{}
 		if err := json.Unmarshal(body, &releaseFromApi); err != nil {
 			return err
 		}

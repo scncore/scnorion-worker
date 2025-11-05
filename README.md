@@ -1,3 +1,3 @@
-# OpenUEM Worker
+# scnorion Worker
 
-Repository containing OpenUEM workers (agents, notification, cert-manager)
+Repository containing scnorion workers (agents, notification, cert-manager)

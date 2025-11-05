@@ -4,17 +4,17 @@ import (
 	"log"
 	"os"
 
-	"github.com/open-uem/openuem-worker/internal/commands"
+	"github.com/scncore/scnorion-worker/internal/commands"
 	"github.com/urfave/cli/v2"
 )
 
 func main() {
 	app := &cli.App{
-		Name:      "openuem-worker",
+		Name:      "scnorion-worker",
 		Commands:  getCommands(),
-		Usage:     "Manage an OpenUEM worker",
-		Authors:   []*cli.Author{{Name: "Miguel Angel Alvarez Cabrerizo", Email: "mcabrerizo@openuem.eu"}},
-		Copyright: "2025 - Miguel Angel Alvarez Cabrerizo <https://github.com/open-uem>",
+		Usage:     "Manage an scnorion worker",
+		Authors:   []*cli.Author{{Name: "Miguel Angel Alvarez Cabrerizo", Email: "mcabrerizo@scnorion.eu"}},
+		Copyright: "2025 - Miguel Angel Alvarez Cabrerizo <https://github.com/scncore>",
 	}
 
 	if err := app.Run(os.Args); err != nil {

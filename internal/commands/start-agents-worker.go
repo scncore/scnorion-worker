@@ -8,24 +8,24 @@ import (
 	"syscall"
 
 	"github.com/go-co-op/gocron/v2"
-	"github.com/open-uem/openuem-worker/internal/common"
+	"github.com/scncore/scnorion-worker/internal/common"
 	"github.com/urfave/cli/v2"
 )
 
 func AgentWorker() *cli.Command {
 	return &cli.Command{
 		Name:  "agents",
-		Usage: "Manage OpenUEM's Agents worker",
+		Usage: "Manage scnorion's Agents worker",
 		Subcommands: []*cli.Command{
 			{
 				Name:   "start",
-				Usage:  "Start an OpenUEM's Agents worker",
+				Usage:  "Start an scnorion's Agents worker",
 				Action: startAgentsWorker,
 				Flags:  CommonFlags(),
 			},
 			{
 				Name:   "stop",
-				Usage:  "Stop an OpenUEM's Agents worker",
+				Usage:  "Stop an scnorion's Agents worker",
 				Action: stopWorker,
 			},
 		},

@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/go-co-op/gocron/v2"
-	"github.com/open-uem/nats"
+	"github.com/scncore/nats"
 )
 
 func (w *Worker) StartNATSConnectJob(queueSubscribe func() error) error {

@@ -6,13 +6,13 @@ import (
 	"time"
 
 	"github.com/nats-io/nats.go"
-	"github.com/open-uem/ent"
-	openuem_nats "github.com/open-uem/nats"
-	"github.com/open-uem/openuem-worker/internal/common/notifications"
+	"github.com/scncore/ent"
+	scnorion_nats "github.com/scncore/nats"
+	"github.com/scncore/scnorion-worker/internal/common/notifications"
 )
 
 func (w *Worker) SendConfirmEmailHandler(msg *nats.Msg) {
-	notification := openuem_nats.Notification{}
+	notification := scnorion_nats.Notification{}
 
 	if w.Settings == nil {
 		log.Println("[ERROR]: no SMTP settings found, retry in 5 minutes")
@@ -53,7 +53,7 @@ func (w *Worker) SendConfirmEmailHandler(msg *nats.Msg) {
 }
 
 func (w *Worker) SendUserCertificateHandler(msg *nats.Msg) {
-	notification := openuem_nats.Notification{}
+	notification := scnorion_nats.Notification{}
 
 	if w.Settings == nil {
 		log.Println("[ERROR]: no SMTP settings found, retry in 5 minutes")

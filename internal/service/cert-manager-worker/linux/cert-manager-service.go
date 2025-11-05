@@ -9,12 +9,12 @@ import (
 	"syscall"
 
 	"github.com/go-co-op/gocron/v2"
-	"github.com/open-uem/openuem-worker/internal/common"
+	"github.com/scncore/scnorion-worker/internal/common"
 )
 
 func main() {
 	var err error
-	w := common.NewWorker("openuem-cert-manager-worker")
+	w := common.NewWorker("scnorion-cert-manager-worker")
 
 	// Start Task Scheduler
 	w.TaskScheduler, err = gocron.NewScheduler()

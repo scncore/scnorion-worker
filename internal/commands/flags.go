@@ -30,7 +30,7 @@ func CommonFlags() []cli.Flag {
 		},
 		&cli.StringFlag{
 			Name:     "dburl",
-			Usage:    "the Postgres database connection url e.g (postgres://user:password@host:5432/openuem)",
+			Usage:    "the Postgres database connection url e.g (postgres://user:password@host:5432/scnorion)",
 			EnvVars:  []string{"DATABASE_URL"},
 			Required: true,
 		},

@@ -10,25 +10,25 @@ import (
 	"syscall"
 
 	"github.com/go-co-op/gocron/v2"
-	"github.com/open-uem/openuem-worker/internal/common"
-	"github.com/open-uem/utils"
+	"github.com/scncore/scnorion-worker/internal/common"
+	"github.com/scncore/utils"
 	"github.com/urfave/cli/v2"
 )
 
 func CertManagerWorker() *cli.Command {
 	return &cli.Command{
 		Name:  "cert-manager",
-		Usage: "Manage OpenUEM's Cert-Manager worker",
+		Usage: "Manage scnorion's Cert-Manager worker",
 		Subcommands: []*cli.Command{
 			{
 				Name:   "start",
-				Usage:  "Start an OpenUEM's Cert-Manager worker",
+				Usage:  "Start an scnorion's Cert-Manager worker",
 				Action: startCertManagerWorker,
 				Flags:  StartCertManagerWorkerFlags(),
 			},
 			{
 				Name:   "stop",
-				Usage:  "Stop an OpenUEM's Cert-Manager worker",
+				Usage:  "Stop an scnorion's Cert-Manager worker",
 				Action: stopWorker,
 			},
 		},
